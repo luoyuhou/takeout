@@ -9,7 +9,7 @@ const connection = createConnection({
   username: config.DB_USERNAME,
   password: config.DB_PASSWORD,
   database: config.DB,
-  entities: ['src/entities/*.ts', "dist/entities/*.js"],
+  entities: ["src/entities/*.ts", "dist/entities/*.js"],
   synchronize: false,
   logging: false,
 });

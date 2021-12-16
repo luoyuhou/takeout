@@ -1,5 +1,5 @@
 import koaPassport from "koa-passport";
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 import { Strategy as LocalStrategy } from "passport-local";
 import { getRepository } from "typeorm";
 import { FaUser } from "./entities/FaUser";
@@ -21,6 +21,6 @@ koaPassport.use(new LocalStrategy({ usernameField: "username", passwordField: "p
       if (bcrypt.hashSync(password, userInfo.salt as string) === userInfo.password) {
         return cb(null, userInfo);
       }
-      cb('Wrong Password.');
+      cb("Wrong Password.");
     }).catch((e) => cb(e));
   }));

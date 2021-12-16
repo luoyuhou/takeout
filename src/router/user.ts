@@ -8,6 +8,12 @@ router.get("/", async (ctx) => {
   ctx.body = [{ id: 1, name: "jack"}, { id: 2, name: "rose" }];
 });
 
+/**
+ * @swagger
+ * /user/login:
+ *  post:
+ *     parameters:
+ */
 router.post("/login", async (ctx, next) => {
   await koaPassport.authenticate("local", async (err, user: FaUser) => {
     if (err) {
