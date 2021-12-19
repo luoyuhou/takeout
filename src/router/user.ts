@@ -15,6 +15,10 @@ router.get("/", async (ctx) => {
  *     parameters:
  */
 router.post("/login", async (ctx, next) => {
+  if (ctx.isAuthenticated()) {
+    ctx.redirect("/");
+    return;
+  }
   await koaPassport.authenticate("local", async (err, user: FaUser) => {
     if (err) {
       ctx.status = 400;
@@ -28,18 +32,22 @@ router.post("/login", async (ctx, next) => {
     }
     ctx.status = 200;
     ctx.body = user;
+    ctx.login(user);
   })(ctx, next);
 });
 
 router.get("/login", async (ctx) => {
-  const sess = ctx.session;
-  if (!sess) {
-    ctx.status = 400;
-    ctx.body = "Not Login";
+  console.log("0000000", ctx.session);
+  if (ctx.isAuthenticated()) {
+    // @ts-ignore
+    const { username, email } = ctx.session.passport.user;
+    console.log("username", username);
+    console.log(111);
+    ctx.redirect("/");
     return;
   }
-  ctx.status = 200;
-  ctx.body = sess;
+  ctx.status = 400;
+  ctx.body = "Not Login";
 });
 
 module.exports = router;

@@ -14,15 +14,20 @@ require("./config/database")
   .then(() => logger.info("connect db successful!"))
   .catch((e: { message: any; }) => logger.error(`connect db failed. Error: ${e.message}`));
 
-require("./auth");
+import passport from "./passport";
+import auth from "./middleware/auth";
 
 const app = new Koa();
 app.keys = ["keys"];
 app.use(serve(__dirname + "/public/"));
 // @ts-ignore
 app.use(convert(koaSession({ store: redisStore() })));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(cors());
+
+app.use(auth());
 
 app.use(bodyParser());
 
@@ -41,7 +46,6 @@ app.use(async (ctx, next) => {
 });
 
 app.use(routers.routes());
-// app.use(require("./router/swagger").routes());
 
 app.use(koaSwagger({
   routePrefix: "/swagger", // 接口文档访问地址

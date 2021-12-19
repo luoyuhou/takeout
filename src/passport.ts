@@ -1,18 +1,18 @@
-import koaPassport from "koa-passport";
+const passport = require("koa-passport");
 import bcrypt from "bcryptjs";
 import { Strategy as LocalStrategy } from "passport-local";
 import { getRepository } from "typeorm";
 import { FaUser } from "./entities/FaUser";
 
-koaPassport.serializeUser((user: any, done) => {
+passport.serializeUser((user: any, done: (arg0: null, arg1: any) => void) => {
   done(null, user);
 });
 
-koaPassport.deserializeUser((sessionInfo: any, done: Function) => {
+passport.deserializeUser((sessionInfo: any, done: Function) => {
   done(null, sessionInfo);
 });
 
-koaPassport.use(new LocalStrategy({ usernameField: "username", passwordField: "password" },
+passport.use(new LocalStrategy({ usernameField: "username", passwordField: "password" },
   (username: string, password: string, cb: Function) => {
     getRepository(FaUser).findOne({ username }).then((userInfo) => {
       if (!userInfo) {
@@ -24,3 +24,5 @@ koaPassport.use(new LocalStrategy({ usernameField: "username", passwordField: "p
       cb("Wrong Password.");
     }).catch((e) => cb(e));
   }));
+
+export default passport;
