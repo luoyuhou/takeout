@@ -1,5 +1,6 @@
 import Koa from "koa";
 import koaCsrf from "koa-csrf";
+import cors from "koa2-cors";
 import bodyParser from "koa-bodyparser";
 import serve from "koa-static";
 import convert from "koa-convert";
@@ -20,6 +21,8 @@ app.keys = ["keys"];
 app.use(serve(__dirname + "/public/"));
 // @ts-ignore
 app.use(convert(koaSession({ store: redisStore() })));
+
+app.use(cors());
 
 app.use(bodyParser());
 

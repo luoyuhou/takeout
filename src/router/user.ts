@@ -31,4 +31,15 @@ router.post("/login", async (ctx, next) => {
   })(ctx, next);
 });
 
+router.get("/login", async (ctx) => {
+  const sess = ctx.session;
+  if (!sess) {
+    ctx.status = 400;
+    ctx.body = "Not Login";
+    return;
+  }
+  ctx.status = 200;
+  ctx.body = sess;
+});
+
 module.exports = router;
