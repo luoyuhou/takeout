@@ -37,12 +37,8 @@ router.post("/login", async (ctx, next) => {
 });
 
 router.get("/login", async (ctx) => {
-  console.log("0000000", ctx.session);
   if (ctx.isAuthenticated()) {
     // @ts-ignore
-    const { username, email } = ctx.session.passport.user;
-    console.log("username", username);
-    console.log(111);
     ctx.redirect("/");
     return;
   }

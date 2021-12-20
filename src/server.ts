@@ -1,5 +1,6 @@
 import Koa from "koa";
 import koaCsrf from "koa-csrf";
+import koaHelmet from "koa-helmet";
 import cors from "koa2-cors";
 import bodyParser from "koa-bodyparser";
 import serve from "koa-static";
@@ -26,7 +27,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(cors());
-
+app.use(koaHelmet());
 app.use(auth());
 
 app.use(bodyParser());
