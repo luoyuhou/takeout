@@ -1,7 +1,8 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Index("user_wx_id_unique", ["wxId"], { unique: true })
-@Index("username", ["username"], {})
+@Index("username", ["username"], { unique: true })
+@Index("user_id", ["userId"], { unique: true })
 @Index("email", ["email"], {})
 @Index("mobile", ["mobile"], {})
 @Entity("fa_user", { schema: "fastadmin" })
@@ -17,6 +18,14 @@ export class FaUser {
   @Column("varchar", { name: "wx_id", unique: true, length: 64 })
   wxId: string;
 
+  @Column("varchar", {
+    name: "user_id",
+    unique: true,
+    comment: "用户id",
+    length: 50,
+  })
+  userId: string;
+
   @Column("int", {
     name: "group_id",
     comment: "组别ID",
@@ -27,11 +36,11 @@ export class FaUser {
 
   @Column("varchar", {
     name: "username",
-    nullable: true,
+    unique: true,
     comment: "用户名",
     length: 32,
   })
-  username: string | null;
+  username: string;
 
   @Column("varchar", {
     name: "nickname",

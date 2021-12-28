@@ -1,4 +1,5 @@
 import Koa from "koa";
+const rTracer = require("cls-rtracer");
 import koaCsrf from "koa-csrf";
 import koaHelmet from "koa-helmet";
 import cors from "koa2-cors";
@@ -16,13 +17,15 @@ require("./config/database")
   .catch((e: { message: any; }) => logger.error(`connect db failed. Error: ${e.message}`));
 
 import passport from "./passport";
-import auth from "./middleware/auth";
+import { auth } from "./middleware/auth";
+require("./clients");
 
 const app = new Koa();
+app.use(rTracer.koaMiddleware());
 app.keys = ["keys"];
 app.use(serve(__dirname + "/public/"));
 // @ts-ignore
-app.use(convert(koaSession({ store: redisStore() })));
+app.use(convert(koaSession({ store: redisStore({ host: config.REDIS_HOST, port: config.REDIS_PORT, db: config.REDIS_DB, password: config.REDIS_PASSWORD }) })));
 app.use(passport.initialize());
 app.use(passport.session());
 

@@ -1,6 +1,7 @@
 import winston, {format} from "winston";
 import moment from "moment";
 import path from "path";
+import { id } from "cls-rtracer";
 
 const LOG_PATH = "./logs";
 
@@ -14,7 +15,7 @@ const logger = winston.createLogger({
     format.errors({ stack: true }),
     format.splat(),
     format.printf((info) => {
-      return `[${moment().format("YYYY-MM-DD HH:mm:ss.SS")}] [${info.level}] ${info.message}`;
+      return `[${moment().format("YYYY-MM-DD HH:mm:ss.SS")}] [${id() || ""}] [${info.level}] ${info.message}`;
     })
   ),
   transports: [

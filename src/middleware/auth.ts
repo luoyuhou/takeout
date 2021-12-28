@@ -1,5 +1,6 @@
 import { Context } from "koa";
 import consts from "../config/consts";
+import { FaUser } from "../entities/FaUser";
 
 const auth = () => {
   return async (ctx: Context, next: (() => any)) => {
@@ -11,4 +12,13 @@ const auth = () => {
   };
 };
 
-export default auth;
+const getUser = (ctx: any): FaUser => {
+  const user = ctx.session.passport.user;
+  if (!user) {
+    ctx.logout();
+    ctx.redirect("/login");
+  }
+  return user;
+};
+
+export { auth, getUser };

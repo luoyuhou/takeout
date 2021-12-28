@@ -1,4 +1,3 @@
-const fetch = require("isomorphic-fetch");
 import logger from "../logger";
 
 class MeituanClient {
