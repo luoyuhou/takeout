@@ -12,9 +12,7 @@ import config from "./config/config";
 import logger from "./logger";
 import redisStore from "koa-redis";
 import { koaSwagger } from "koa2-swagger-ui";
-require("./config/database")
-  .then(() => logger.info("connect db successful!"))
-  .catch((e: { message: any; }) => logger.error(`connect db failed. Error: ${e.message}`));
+require("./config/database");
 
 import passport from "./passport";
 import { auth } from "./middleware/auth";

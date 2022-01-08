@@ -1,8 +1,9 @@
 import "reflect-metadata";
-import { createConnection } from "typeorm";
+import { createConnection, Connection } from "typeorm";
 import config from "./config";
+import logger from "../logger";
 
-const connection = createConnection({
+const connection = (): Promise<Connection> => createConnection({
   type: "mysql",
   host: "localhost",
   port: 3306,
@@ -14,4 +15,6 @@ const connection = createConnection({
   logging: false,
 });
 
-module.exports = connection; // 执行连接
+module.exports = connection()
+  .then(() => logger.info("connect db successful!"))
+  .catch((e: { message: any; }) => logger.error(`connect db failed. Error: ${e.message}`)); // 执行连接

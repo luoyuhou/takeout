@@ -10,9 +10,9 @@ class FaUserService {
     return { pwd, salt };
   }
 
-  async createUser (wxId: string) {
+  async createUser (params: { wxId: string; joinip: string }) {
     const userId = `user${v4()}`;
-    return getCustomRepository(FaUserRepo).createUser({ wxId, userId, username: userId });
+    return getCustomRepository(FaUserRepo).createUser({ ...params, userId, username: userId, nickname: userId, status: "normal", jointime: Math.round(new Date().getTime() / 1000) });
   }
 
   async editProfile(id: number, params: Record<string, any>) {

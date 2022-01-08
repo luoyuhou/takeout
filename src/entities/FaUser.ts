@@ -1,7 +1,6 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Index("user_wx_id_unique", ["wxId"], { unique: true })
-@Index("username", ["username"], { unique: true })
 @Index("user_id", ["userId"], { unique: true })
 @Index("email", ["email"], {})
 @Index("mobile", ["mobile"], {})
@@ -34,12 +33,7 @@ export class FaUser {
   })
   groupId: number;
 
-  @Column("varchar", {
-    name: "username",
-    unique: true,
-    comment: "用户名",
-    length: 32,
-  })
+  @Column("varchar", { name: "username", comment: "用户名", length: 64 })
   username: string;
 
   @Column("varchar", {

@@ -52,7 +52,7 @@ router.post("/login", async (ctx, next) => {
  *  get:
  *   description: "检测用户登陆"
  */
-router.head("/login", async (ctx) => {
+router.get("/login", async (ctx) => {
   const noRedirect = ctx.request.header["no-redirect"];
   if (ctx.isAuthenticated()) {
     if (noRedirect) {
@@ -78,16 +78,16 @@ router.get("/wxlogin", async (ctx) => {
     if (!output) {
       throw new Error("login failed!");
     }
-    console.log("output", output);
     const { openid } = output;
-    let user = await getCustomRepository(FaUserRepo).findOne({ wxId: openid });
+    const faUserRepo = getCustomRepository(FaUserRepo);
+    let user = await faUserRepo.findOne({ wxId: openid });
     if (!user) {
-      const insert = await faUserService.createUser(openid);
+      const insert = await faUserService.createUser({ wxId: openid, joinip: ctx.ip });
       if (!insert) {
         throw new Error("Please try again!");
       }
-      user = await getCustomRepository(FaUserRepo).findOne({ wxId: openid });
     }
+    user = await faUserRepo.weixinLogin(openid, ctx.ip);
     if (!user) {
       throw new Error("Please try again");
     }
@@ -105,7 +105,6 @@ router.get("/wxlogin", async (ctx) => {
 router.get("/scanloginweb", async (ctx) => {
   const { code } = ctx.request.query;
   const user = getUser(ctx);
-  console.log("code", code);
   await redisCli.set(`scan-token-${code}`, user.id);
   await redisCli.expire(`scan-token-${code}`, 30);
   ctx.status = 200;
